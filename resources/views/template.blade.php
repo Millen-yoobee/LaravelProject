@@ -5,7 +5,7 @@
 
 @section("styles")
 
-
+	<!-- This is where you will write CSS -->
 
 @endsection
 
@@ -17,6 +17,6 @@
 
 @section("scripts")
 
-
+<!-- This is where you will write your JS -->
 
 @endsection

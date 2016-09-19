@@ -16,7 +16,7 @@
 @section("content")
 
 	<h1>Add New Product</h1>
-	<form id="add-product" method="post" enctype="multipart/form-date" action="/submit-product">
+	<form id="add-product" method="post" enctype="multipart/form-data" action="/submit-product">
 		{!! csrf_field() !!}
 
 		<div class="form-group {{ $errors->has("product_title") ? "has-error" : "" }}">

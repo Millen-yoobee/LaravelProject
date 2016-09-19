@@ -11,8 +11,10 @@ use App\Products;
 class ShopController extends Controller
 {
     public function index() {
-    	return view("shop.index");  
-    	// folder shop file index 
+        $AllProducts = Products::all();
+    	
+        return view("shop.index", compact("AllProducts"));  
+    	
     }
 
     public function add() {
@@ -25,12 +27,12 @@ class ShopController extends Controller
     		"product_description"=>"required|min:10",
             "product_price"=>"required|numeric",
             "product_quantity"=>"required|numeric",
-   //         "product_image"=>"required|image",
+           "product_image"=>"required|image",
     		]);
 
         $newProduct = new Products();
         $newProduct->title = $request->product_title;
-        $newProduct->description = $request->description;
+        $newProduct->description = $request->product_description;
         $newProduct->price = $request->product_price;
         $newProduct->quantity = $request->product_quantity;
 
@@ -45,12 +47,29 @@ class ShopController extends Controller
         });
         $productImage->save($folder."/".$imagename.".jpg", 100);
 
-        // $newProduct->save;
+        $newProduct->image = $imagename.".jpg";
+
+        $newProduct->save();
         return redirect("/Shop");
 
         // var_dump($newProduct);
         // die();
+    }
+
+    public function show($id) {
+        $product = Products::findOrFail($id);
+        return view("shop.show", compact("product"));
 
     }
+
+    public function delete($id) {
+        $product = Products::findOrFail($id);
+        $productImage = $product["image"];
+        unlink("./images/Products/$productImage");
+        $product->delete();
+        return redirect("/Shop");
+
+    }
+
 
 }

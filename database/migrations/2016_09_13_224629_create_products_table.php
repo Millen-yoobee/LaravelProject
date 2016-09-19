@@ -18,7 +18,7 @@ class CreateProductsTable extends Migration
             $table->text("description");
             $table->string("image", 100);
             $table->decimal("price", 5, 2);
-            $table->float("quantity");
+            $table->smallInteger("quantity");
             $table->timestamps();
         });
     }
@@ -28,8 +28,8 @@ class CreateProductsTable extends Migration
      *
      * @return void
      */
-    public function down("products")
+    public function down()
     {
-        //
+        Schema::drop("products");
     }
 }
