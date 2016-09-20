@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use Intervention\Image\ImageManager; 
 use App\Products;
+use Session;
 
 class ShopController extends Controller
 {
@@ -42,7 +43,7 @@ class ShopController extends Controller
         $imagename = preg_replace("/[^0-9a-zA-Z]/", "", $request->product_title);
 
         $productImage = $manager->make($request->product_image);
-        $productImage->fit(462, 462, function($constraint) {
+        $productImage->fit(500, null, function($constraint) {
             $constraint->upsize();
         });
         $productImage->save($folder."/".$imagename.".jpg", 100);
@@ -71,5 +72,50 @@ class ShopController extends Controller
 
     }
 
+    public function edit($id) {
+        $product = Products::findOrFail($id);
+        return view("shop.edit", compact("product"));
+
+    }
+
+    public function update(Request $request, $id) {
+        $this->validate($request, [
+            "title"=>"required|min:1|max:255",
+            "description"=>"required|min:10",
+            "price"=>"required|numeric",
+            "quantity"=>"required|numeric",
+            "image"=>"image",
+            ]);
+        $product = Products::findOrFail($id);
+        $productImage = $product["image"];
+
+        $product->title = $request->title;
+        $product->description = $request->description;
+        $product->price = $request->price;
+        $product->quantity = $request->quantity;
+
+        if ($request->image) {
+            unlink("./images/Products/$productImage");
+            $manager = new ImageManager();
+
+            $folder = "./images/Products";
+            $imagename = preg_replace("/[^0-9a-zA-Z]/", "", $request->title);
+
+            $productImage = $manager->make($request->image);
+            $productImage->fit(500, null, function($constraint) {
+                $constraint->upsize();
+            });
+            $productImage->save($folder."/".$imagename.".jpg", 100);
+
+            $product->image = $imagename.".jpg";
+
+        }
+
+        $product->save();
+
+        Session::flash("success", "This product was successfully updated.");
+
+        return redirect("/Shop/$product->id");
+    }
 
 }

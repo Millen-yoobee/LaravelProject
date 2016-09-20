@@ -26,6 +26,7 @@
     @include("partials._nav")   {{-- looks at the partials folder for _nav.blade.php   --}}
     
     <div class="container">
+        @include("partials._messages")
         @yield("content")
     </div>
 
