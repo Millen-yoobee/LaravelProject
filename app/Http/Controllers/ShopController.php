@@ -11,9 +11,9 @@ use App\Products;
 class ShopController extends Controller
 {
     public function index() {
-        $AllProducts = Products::all();
-    	
-        return view("shop.index", compact("AllProducts"));  
+        // $AllProducts = Products::all();
+        $AllProducts = Products::paginate(6);
+    	return view("shop.index", compact("AllProducts"));  
     	
     }
 
