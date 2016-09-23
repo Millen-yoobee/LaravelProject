@@ -34,6 +34,13 @@
 					</tr>
 
 				@endforeach
+				<tr>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td><strong>Grandtotal</strong></td>
+					<td><strong>{{ $Grandtotal }}</strong></td>
+				</tr>
 			</tbody>
 			<tfoot>
 				<tr>
@@ -41,7 +48,7 @@
 					<td></td>
 					<td></td>
 					<td></td>
-					<td><a href="">Checkout</a> </td>
+					<td><a href="/Checkout/{{ \Auth::user()->id }}">Checkout</a> </td>
 				</tr>
 			</tfoot>
 
